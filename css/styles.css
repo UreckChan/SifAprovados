@@ -29,3 +29,13 @@ footer {
     height:20%;
     background-color:red;
 }
+
+#tc{
+    border-radius: 10px;
+}
+
+#ct{
+    background-color: #10153B;
+    border-radius: 10px;
+    opacity: 70%;
+}

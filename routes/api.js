@@ -11,17 +11,39 @@ api.get('/getData', async(req, res)=>{
     }
 });
 
-api.get('/setData/:name/:value', async(req, res)=>{
+api.get('/setDataHumedad/:value', async(req, res)=>{
     try{
         res.send(await Datos.findOneAndUpdate(
             {
-                nombre : req.params.name
-                
+                nombre : "Humedad"
             },
             {
                 $push: {
                     datos: {
                         $each:[{fecha: new Date().toISOString(), valor: req.params.value}],
+                        $position:0
+                    
+                    } 
+                }
+            }
+        ));
+       // console.log();
+    } catch (e){
+        console.error(`Error: ${e}`);
+    }
+});
+
+
+api.get('/setDataMovimiento/:value/:sensor', async(req, res)=>{
+    try{
+        res.send(await Datos.findOneAndUpdate(
+            {
+                nombre : "Movimiento"
+            },
+            {
+                $push: {
+                    datos: {
+                        $each:[{fecha: new Date().toISOString(), valor: req.params.value, sensor: req.params.sensor}],
                         $position:0
                     
                     } 
