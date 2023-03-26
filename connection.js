@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 
 const connecttoMongoBD=()=>{
-
     const linkMongoDB = 'mongodb+srv://APROVADOS:APROVADOSSIF2023@sif.5gzdhzk.mongodb.net/SIF';
     mongoose.set('strictQuery', false);
     mongoose.connect(linkMongoDB)
