@@ -25,11 +25,12 @@
                             <div class="card-header">
                               <br>
                             </div>
-                            <h1>Humedad</h1>
+                            <h1>Cultivo</h1>
                             <div class="card-body ">
                                 <table class="table table-bordered table-dark table-hover table-fixed" id="table_humedad">
-                                        <th>Dia</th>
+                                        <th>Fecha</th>
                                         <th>Humedad</th>
+                                        <th>Sensor</th>
                                     </thead>
                                     <tbody id="humedad_body">
                     
@@ -51,11 +52,12 @@
                             <div class="card-header">
                               <br>
                             </div>
-                            <h1>Movimiento</h1>
+                            <h1>Corral</h1>
                             <div class="card-body ">
                                 <table class="table table-bordered table-dark table-hover" id="table_move">
-                                        <th>Dia</th>
+                                        <th>Fecha</th>
                                         <th>Movimiento</th>
+                                        <th>Sensor</th>
                                     </thead>
                                     <tbody id="move_body">
                     
@@ -85,61 +87,63 @@
 
     
     
-    <script>
+      <script>
                     
-    log = [];
-    oJson = {};
-    var htmlTags = "";
-var maxRows = 5; // Establece el número máximo de filas
+        log = [];
+        oJson = {};
+        var htmlTags = "";
+        var maxRows = 5; // Establece el número máximo de filas
 
-var humedadCount = 0; // Contador para la tabla de humedad
-var moveCount = 0; // Contador para la tabla de movimiento
+        var humedadCount = 0; // Contador para la tabla de humedad
+        var moveCount = 0; // Contador para la tabla de movimiento
 
-function rJson() {
+        function rJson() {
 
-    fetch('http://localhost:3000/api/getData')
-        .then((response) => response.json())
-        .then((json) => {
+            fetch('http://localhost:3000/api/getData')
+                .then((response) => response.json())
+                .then((json) => {
 
-            oJson = json;
-            console.log(oJson);
+                    oJson = json;
+                    console.log(oJson);
 
-            oJson[0].datos.map((data) => {
-                console.log(data);
-                if (humedadCount < maxRows) { // Comprueba si el contador es menor que el número máximo de filas
-                    htmlTags += '<tr id="HTab">' +
-                        '<td>' + data.fecha + '</td>' +
-                        '<td>' + data.valor + '</td>' +
-                        '</tr>';
-                    humedadCount++; // Aumenta el contador
-                }
-            });
-            $('#humedad_body').append(htmlTags);
-            htmlTags = ""; // Limpia el valor de htmlTags para la siguiente tabla
+                    $('#humedad_body').empty(); // Limpia la tabla antes de agregar las nuevas filas
+                    humedadCount = 0; // Reinicia el contador
 
-            oJson[1].datos.map((datas) => {
-                console.log(datas);
-                if (moveCount < maxRows) { // Comprueba si el contador es menor que el número máximo de filas
-                    htmlTags += '<tr id="MTab">' +
-                        '<td>' + datas.fecha + '</td>' +
-                        '<td>' + datas.valor + '</td>' +
-                        '</tr>';
-                    moveCount++; // Aumenta el contador
-                }
-            });
-            $('#move_body').append(htmlTags);
-            htmlTags = ""; // Limpia el valor de htmlTags para la siguiente tabla
+                    oJson[0].datos.map((data) => {
+                        console.log(data);
+                        if (humedadCount < maxRows) { // Comprueba si el contador es menor que el número máximo de filas
+                            htmlTags += '<tr id="HTab">' +
+                                '<td>' + data.fecha + '</td>' +
+                                '<td>' + data.valor + '</td>' +
+                                '<td>' + data.sensor + '</td>'+
+                                '</tr>';
+                            humedadCount++; // Aumenta el contador
+                        }
+                    });
+                    $('#humedad_body').append(htmlTags);
+                    htmlTags = ""; // Limpia el valor de htmlTags para la siguiente tabla
 
-            //console.log(oJson);
+                    $('#move_body').empty(); // Limpia la tabla antes de agregar las nuevas filas
+                    moveCount = 0; // Reinicia el contador
 
-        })
-    return true;
-}
-rJson();
+                    oJson[1].datos.map((datas) => {
+                        console.log(datas);
+                        if (moveCount < maxRows) { // Comprueba si el contador es menor que el número máximo de filas
+                            htmlTags += '<tr id="MTab">' +
+                                '<td>' + datas.fecha + '</td>' +
+                                '<td>' + datas.valor + '</td>' +
+                                '<td>' + datas.sensor + '</td>' +
+                                '</tr>';
+                            moveCount++; // Aumenta el contador
+                        }
+                    });
+                    $('#move_body').append(htmlTags);
+                    htmlTags = ""; // Limpia el valor de htmlTags para la siguiente tabla
 
-setInterval('rJson()', 1000);
-
-
+                })
+            return true;
+        }
+        setInterval(rJson, 5000); // Llama a la función rJson cada 5 segundos
 
     </script>
     
